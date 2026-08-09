@@ -1,0 +1,15 @@
+meta {
+  name: 정산 조회
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/customers/{{customerId}}/settlement
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{authToken}}
+}

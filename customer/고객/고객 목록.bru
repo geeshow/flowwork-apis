@@ -1,0 +1,15 @@
+meta {
+  name: 고객 목록
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/customers
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{authToken}}
+}

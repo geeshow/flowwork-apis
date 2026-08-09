@@ -1,0 +1,20 @@
+meta {
+  name: 정산 취소
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/settlements/{{settlementId}}/cancel
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{authToken}}
+  Content-Type: application/json
+}
+
+body:json {
+  {"reason": "{{reason}}"}
+}
