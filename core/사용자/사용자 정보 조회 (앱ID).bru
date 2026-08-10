@@ -11,9 +11,10 @@ get {
 }
 
 headers {
+  @description("인증 토큰 (Bearer)")
   Authorization: Bearer {{authToken}}
 }
 
 docs {
-  output: app_user_id, sec_user_id, CIF, name, phone, email
+  output: app_user_id=앱 사용자 ID, sec_user_id=보안 사용자 ID, CIF=고객식별번호, name=이름, phone=전화번호, email=이메일
 }

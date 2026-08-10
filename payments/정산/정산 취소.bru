@@ -11,10 +11,16 @@ post {
 }
 
 headers {
+  @description("인증 토큰 (Bearer)")
   Authorization: Bearer {{authToken}}
+  @description("요청 본문 형식")
   Content-Type: application/json
 }
 
 body:json {
   {"reason": "{{reason}}"}
+}
+
+docs {
+  output: settlementId=정산 ID, status=상태, reason=사유
 }

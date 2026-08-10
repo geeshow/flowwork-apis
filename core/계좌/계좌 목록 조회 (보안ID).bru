@@ -11,9 +11,10 @@ get {
 }
 
 headers {
+  @description("인증 토큰 (Bearer)")
   Authorization: Bearer {{authToken}}
 }
 
 docs {
-  output: accountNo, name, accountType, status, openedAt, closedAt, owner.name, owner.cif, balance.amount, balance.currency, tags
+  output: accountNo=계좌번호, name=계좌명, accountType=계좌 유형, status=상태, openedAt=개설일, closedAt=폐쇄일, owner.name=소유자명, owner.cif=소유자 CIF, balance.amount=잔액, balance.currency=통화, tags=태그
 }

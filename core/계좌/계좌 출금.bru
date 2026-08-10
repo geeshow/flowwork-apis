@@ -11,7 +11,9 @@ post {
 }
 
 headers {
+  @description("인증 토큰 (Bearer)")
   Authorization: Bearer {{authToken}}
+  @description("요청 본문 형식")
   Content-Type: application/json
 }
 
@@ -20,5 +22,5 @@ body:json {
 }
 
 docs {
-  output: accountNo, status, withdrawnAmount, balanceAfter, reason
+  output: accountNo=계좌번호, status=상태, withdrawnAmount=출금액, balanceAfter=출금 후 잔액, reason=사유
 }
