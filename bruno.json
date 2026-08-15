@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "name": "flowwork-apis-v2",
+  "name": "flowwork-apis",
   "type": "collection",
   "ignore": [
     "node_modules",
