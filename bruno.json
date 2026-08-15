@@ -1,5 +1,6 @@
 {
   "version": "1",
   "name": "flowwork-apis",
-  "type": "collection"
+  "type": "collection",
+  "ignore": ["node_modules", ".git", "workflows"]
 }
