@@ -1,0 +1,6 @@
+name: payments
+variables:
+  - name: baseUrl
+    value: http://localhost:9100/payments
+  - name: authToken
+    value: vault://payments/api-token

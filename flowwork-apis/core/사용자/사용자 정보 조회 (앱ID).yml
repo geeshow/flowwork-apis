@@ -1,0 +1,21 @@
+info:
+  name: 사용자 정보 조회 (앱ID)
+  type: http
+  seq: 2
+
+http:
+  method: GET
+  url: "{{coreBaseUrl}}/users/{{app_user_id}}"
+  headers:
+    - name: Authorization
+      value: Bearer {{authToken}}
+      description: 인증 토큰 (Bearer)
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: true
+
+docs: "output: app_user_id=앱 사용자 ID, sec_user_id=보안 사용자 ID, CIF=고객식별번호, name=이름, phone=전화번호, email=이메일"

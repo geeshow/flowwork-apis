@@ -1,0 +1,4 @@
+name: core
+variables:
+  - name: coreBaseUrl
+    value: http://localhost:9100/core

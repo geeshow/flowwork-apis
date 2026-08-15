@@ -1,0 +1,27 @@
+info:
+  name: 계좌 폐쇄
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{coreBaseUrl}}/accounts/{{accountNo}}/close"
+  headers:
+    - name: Authorization
+      value: Bearer {{authToken}}
+      description: 인증 토큰 (Bearer)
+    - name: Content-Type
+      value: application/json
+      description: 요청 본문 형식
+  body:
+    type: json
+    data: '{"reason": "{{reason}}"}'
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: true
+
+docs: "output: accountNo=계좌번호, status=상태, closedAt=폐쇄일, reason=사유"

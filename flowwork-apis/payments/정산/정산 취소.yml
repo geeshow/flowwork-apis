@@ -1,0 +1,27 @@
+info:
+  name: 정산 취소
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{baseUrl}}/api/settlements/{{settlementId}}/cancel"
+  headers:
+    - name: Authorization
+      value: Bearer {{authToken}}
+      description: 인증 토큰 (Bearer)
+    - name: Content-Type
+      value: application/json
+      description: 요청 본문 형식
+  body:
+    type: json
+    data: '{"reason": "{{reason}}"}'
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: true
+
+docs: "output: settlementId=정산 ID, status=상태, reason=사유"
