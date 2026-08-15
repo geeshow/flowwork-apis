@@ -1,0 +1,73 @@
+{
+  "id": "account_close",
+  "domain": "계좌",
+  "task": "폐쇄",
+  "name": "계좌 폐쇄",
+  "description": "app_user_id로 사용자를 조회해 sec_user_id를 확정하고, 그 계좌 목록에서 폐쇄할 계좌를 골라 폐쇄한다.",
+  "baseInputs": [
+    {
+      "kind": "MANUAL",
+      "key": "app_user_id",
+      "label": "앱 사용자 ID",
+      "valueType": "string"
+    },
+    {
+      "kind": "DEPENDENT_LOOKUP",
+      "key": "sec_user_id",
+      "label": "보안 사용자 ID",
+      "dependsOnKey": "app_user_id",
+      "lookupApiId": "11c8a795c396e2b4",
+      "displayFields": [
+        "name",
+        "sec_user_id"
+      ],
+      "valueField": "sec_user_id"
+    },
+    {
+      "kind": "DEPENDENT_COMBO",
+      "key": "accountNo",
+      "label": "폐쇄할 계좌",
+      "dependsOnKey": "sec_user_id",
+      "lookupApiId": "6f11d17b8bf9ede4",
+      "labelField": "accountType",
+      "valueField": "accountNo"
+    }
+  ],
+  "steps": [
+    {
+      "id": "close_account",
+      "order": 1,
+      "name": "계좌 폐쇄",
+      "apiBinding": {
+        "catalogEntry": {
+          "department": "core",
+          "collectionFile": "core",
+          "itemPath": [
+            "계좌"
+          ],
+          "name": "계좌 폐쇄"
+        },
+        "variableBindings": {
+          "accountNo": {
+            "kind": "USER_INPUT",
+            "inputKey": "accountNo"
+          },
+          "reason": {
+            "kind": "FIXED",
+            "value": "고객 요청"
+          }
+        }
+      },
+      "stopOnFailure": true,
+      "resultView": {
+        "mode": "TABLE",
+        "columns": [
+          "accountNo",
+          "status",
+          "closedAt",
+          "reason"
+        ]
+      }
+    }
+  ]
+}

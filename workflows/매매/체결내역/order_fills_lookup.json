@@ -1,0 +1,9 @@
+{
+  "id": "order_fills_lookup",
+  "domain": "매매",
+  "task": "체결내역",
+  "name": "주문체결내역 조회",
+  "description": "(스텝 미등록 — 편집에서 구성)",
+  "baseInputs": [],
+  "steps": []
+}

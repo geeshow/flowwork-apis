@@ -1,0 +1,46 @@
+{
+  "id": "user_lookup",
+  "domain": "계좌",
+  "task": "사용자관리",
+  "name": "사용자 조회",
+  "description": "고객 ID로 고객 정보를 조회한다.",
+  "baseInputs": [
+    {
+      "kind": "MANUAL",
+      "key": "customerId",
+      "label": "고객 ID",
+      "valueType": "string"
+    }
+  ],
+  "steps": [
+    {
+      "id": "lookup",
+      "order": 1,
+      "name": "조회",
+      "apiBinding": {
+        "catalogEntry": {
+          "department": "customer",
+          "collectionFile": "customer",
+          "itemPath": [
+            "고객"
+          ],
+          "name": "고객 조회"
+        },
+        "variableBindings": {
+          "customerId": {
+            "kind": "USER_INPUT",
+            "inputKey": "customerId"
+          }
+        }
+      },
+      "resultView": {
+        "mode": "TABLE",
+        "columns": [
+          "id",
+          "name",
+          "phone"
+        ]
+      }
+    }
+  ]
+}

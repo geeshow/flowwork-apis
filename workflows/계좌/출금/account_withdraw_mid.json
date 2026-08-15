@@ -1,0 +1,122 @@
+{
+  "id": "account_withdraw_mid",
+  "domain": "계좌",
+  "task": "출금",
+  "name": "출금 (중간 선택)",
+  "description": "계좌 목록을 먼저 조회해 표로 확인하고, 그 결과에서 계좌·금액·비밀번호를 중간 입력해 출금한다.",
+  "baseInputs": [
+    {
+      "kind": "MANUAL",
+      "key": "app_user_id",
+      "label": "앱 사용자 ID",
+      "valueType": "string"
+    },
+    {
+      "kind": "DEPENDENT_LOOKUP",
+      "key": "sec_user_id",
+      "label": "보안 사용자 ID",
+      "dependsOnKey": "app_user_id",
+      "lookupApiId": "11c8a795c396e2b4",
+      "displayFields": [
+        "name",
+        "sec_user_id"
+      ],
+      "valueField": "sec_user_id"
+    }
+  ],
+  "steps": [
+    {
+      "id": "list_accounts",
+      "order": 1,
+      "name": "계좌 목록 조회 (보안ID)",
+      "apiBinding": {
+        "catalogEntry": {
+          "department": "core",
+          "collectionFile": "core",
+          "itemPath": [
+            "계좌"
+          ],
+          "name": "계좌 목록 조회 (보안ID)"
+        },
+        "variableBindings": {
+          "sec_user_id": {
+            "kind": "USER_INPUT",
+            "inputKey": "sec_user_id"
+          }
+        }
+      },
+      "stopOnFailure": true,
+      "resultView": {
+        "mode": "TABLE",
+        "columns": [
+          "accountNo",
+          "accountType",
+          "status",
+          "balance.amount"
+        ]
+      },
+      "midInputs": [
+        {
+          "kind": "STEP_RESULT_COMBO",
+          "key": "accountNo",
+          "label": "출금 계좌",
+          "arrayPath": "",
+          "labelField": "accountType",
+          "valueField": "accountNo"
+        },
+        {
+          "kind": "MANUAL",
+          "key": "amount",
+          "label": "출금 금액",
+          "valueType": "number"
+        },
+        {
+          "kind": "MANUAL",
+          "key": "password",
+          "label": "출금 비밀번호",
+          "valueType": "password"
+        }
+      ]
+    },
+    {
+      "id": "do_withdraw",
+      "order": 2,
+      "name": "계좌 출금",
+      "apiBinding": {
+        "catalogEntry": {
+          "department": "core",
+          "collectionFile": "core",
+          "itemPath": [
+            "계좌"
+          ],
+          "name": "계좌 출금"
+        },
+        "variableBindings": {
+          "accountNo": {
+            "kind": "USER_INPUT",
+            "inputKey": "accountNo"
+          },
+          "amount": {
+            "kind": "USER_INPUT",
+            "inputKey": "amount"
+          },
+          "password": {
+            "kind": "USER_INPUT",
+            "inputKey": "password"
+          }
+        }
+      },
+      "stopOnFailure": true,
+      "resultView": {
+        "mode": "TABLE",
+        "columns": [
+          "accountNo",
+          "status",
+          "withdrawnAmount",
+          "balanceAfter",
+          "reason"
+        ]
+      }
+    }
+  ]
+}

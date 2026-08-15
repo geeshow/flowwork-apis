@@ -1,0 +1,115 @@
+{
+  "id": "account_force_close",
+  "domain": "계좌",
+  "task": "폐쇄",
+  "name": "계좌 강제 폐쇄",
+  "description": "사용자·계좌를 확인한 뒤 매도와 강제 정산을 거쳐 계좌를 강제 폐쇄한다.",
+  "baseInputs": [
+    {
+      "kind": "MANUAL",
+      "key": "app_user_id",
+      "label": "앱 사용자 ID",
+      "valueType": "string"
+    },
+    {
+      "kind": "DEPENDENT_LOOKUP",
+      "key": "sec_user_id",
+      "label": "보안 사용자 ID",
+      "dependsOnKey": "app_user_id",
+      "lookupApiId": "11c8a795c396e2b4",
+      "displayFields": [
+        "name",
+        "sec_user_id"
+      ],
+      "valueField": "sec_user_id"
+    },
+    {
+      "kind": "DEPENDENT_COMBO",
+      "key": "accountNo",
+      "label": "폐쇄할 계좌",
+      "dependsOnKey": "sec_user_id",
+      "lookupApiId": "6f11d17b8bf9ede4",
+      "labelField": "accountType",
+      "valueField": "accountNo"
+    },
+    {
+      "kind": "MANUAL",
+      "key": "password",
+      "label": "거래 비밀번호",
+      "valueType": "password"
+    }
+  ],
+  "steps": [
+    {
+      "id": "sell_step",
+      "order": 1,
+      "name": "매도",
+      "workflowBinding": {
+        "ref": {
+          "id": "sell"
+        },
+        "inputMappings": {
+          "accountNo": {
+            "kind": "USER_INPUT",
+            "inputKey": "accountNo"
+          },
+          "password": {
+            "kind": "USER_INPUT",
+            "inputKey": "password"
+          }
+        }
+      }
+    },
+    {
+      "id": "settle_step",
+      "order": 2,
+      "name": "강제 정산",
+      "workflowBinding": {
+        "ref": {
+          "id": "force_settle"
+        },
+        "inputMappings": {
+          "accountNo": {
+            "kind": "USER_INPUT",
+            "inputKey": "accountNo"
+          }
+        }
+      }
+    },
+    {
+      "id": "close_step",
+      "order": 3,
+      "name": "계좌 폐쇄",
+      "apiBinding": {
+        "catalogEntry": {
+          "department": "core",
+          "collectionFile": "core",
+          "itemPath": [
+            "계좌"
+          ],
+          "name": "계좌 폐쇄"
+        },
+        "variableBindings": {
+          "accountNo": {
+            "kind": "USER_INPUT",
+            "inputKey": "accountNo"
+          },
+          "reason": {
+            "kind": "FIXED",
+            "value": "강제 폐쇄"
+          }
+        }
+      },
+      "stopOnFailure": true,
+      "resultView": {
+        "mode": "TABLE",
+        "columns": [
+          "accountNo",
+          "status",
+          "closedAt",
+          "reason"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "id": "wf_combo",
+  "domain": "demo",
+  "task": "입력",
+  "name": "콤보·의존조회 데모",
+  "description": "API_COMBO로 고객 선택 → DEPENDENT_LOOKUP으로 이름/전화 확정 → 정산 조회",
+  "baseInputs": [
+    {
+      "kind": "API_COMBO",
+      "key": "customerId",
+      "label": "고객 선택",
+      "sourceApiId": "83214d36eb822903",
+      "labelField": "name",
+      "valueField": "id"
+    },
+    {
+      "kind": "DEPENDENT_LOOKUP",
+      "key": "customerInfo",
+      "label": "고객 확인",
+      "dependsOnKey": "customerId",
+      "lookupApiId": "b83cb8dedc4e3818",
+      "displayFields": [
+        "name",
+        "phone"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "id": "step_1",
+      "order": 1,
+      "name": "조회",
+      "apiBinding": {
+        "catalogEntry": {
+          "department": "payments",
+          "collectionFile": "payments",
+          "itemPath": [
+            "정산"
+          ],
+          "name": "정산 조회"
+        },
+        "variableBindings": {
+          "customerId": {
+            "kind": "USER_INPUT",
+            "inputKey": "customerId"
+          }
+        }
+      }
+    }
+  ]
+}

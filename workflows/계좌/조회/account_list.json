@@ -1,0 +1,62 @@
+{
+  "id": "account_list",
+  "domain": "계좌",
+  "task": "조회",
+  "name": "계좌 목록 조회",
+  "description": "고객식별번호(CIF)로 사용자를 조회해 sec_user_id를 자동 확정하고, 그 계좌 목록을 조회한다.",
+  "baseInputs": [
+    {
+      "kind": "MANUAL",
+      "key": "CIF",
+      "label": "고객식별번호(CIF)",
+      "valueType": "string"
+    },
+    {
+      "kind": "DEPENDENT_LOOKUP",
+      "key": "sec_user_id",
+      "label": "보안 사용자 ID",
+      "dependsOnKey": "CIF",
+      "lookupApiId": "7e400c5248112134",
+      "displayFields": [
+        "name",
+        "sec_user_id"
+      ],
+      "valueField": "sec_user_id"
+    }
+  ],
+  "steps": [
+    {
+      "id": "step_accounts",
+      "order": 1,
+      "name": "계좌 목록 조회 (보안ID)",
+      "apiBinding": {
+        "catalogEntry": {
+          "department": "core",
+          "collectionFile": "core",
+          "itemPath": [
+            "계좌"
+          ],
+          "name": "계좌 목록 조회 (보안ID)"
+        },
+        "variableBindings": {
+          "sec_user_id": {
+            "kind": "USER_INPUT",
+            "inputKey": "sec_user_id"
+          }
+        }
+      },
+      "stopOnFailure": true,
+      "resultView": {
+        "mode": "TABLE",
+        "columns": [
+          "accountNo",
+          "name",
+          "accountType",
+          "status",
+          "openedAt",
+          "closedAt"
+        ]
+      }
+    }
+  ]
+}

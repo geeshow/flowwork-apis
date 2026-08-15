@@ -1,0 +1,49 @@
+{
+  "id": "160cb1fd-d9b1-4c61-8ff6-949d78791d9c",
+  "domain": "계정",
+  "task": "사용자조회",
+  "name": "앱유저아이디조회",
+  "description": "앱유저 아이디를 이용해 사용자 정보를 조회한다",
+  "baseInputs": [
+    {
+      "kind": "MANUAL",
+      "key": "app_user_id",
+      "label": "앱유저아이디",
+      "valueType": "string"
+    }
+  ],
+  "steps": [
+    {
+      "id": "step_fgpwup",
+      "order": 1,
+      "name": "사용자 정보 조회",
+      "apiBinding": {
+        "catalogEntry": {
+          "department": "core",
+          "collectionFile": "core",
+          "itemPath": [
+            "사용자"
+          ],
+          "name": "사용자 정보 조회"
+        },
+        "variableBindings": {
+          "authToken": {
+            "kind": "ENV",
+            "envKey": "authToken"
+          },
+          "coreBaseUrl": {
+            "kind": "ENV",
+            "envKey": "coreBaseUrl"
+          },
+          "app_user_id": {
+            "kind": "USER_INPUT",
+            "inputKey": "app_user_id"
+          }
+        }
+      },
+      "workflowBinding": null,
+      "branchCondition": null,
+      "stopOnFailure": false
+    }
+  ]
+}

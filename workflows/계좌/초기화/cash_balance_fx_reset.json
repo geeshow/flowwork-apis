@@ -1,0 +1,9 @@
+{
+  "id": "cash_balance_fx_reset",
+  "domain": "계좌",
+  "task": "초기화",
+  "name": "출납 잔고 및 환전 내역 초기화",
+  "description": "(스텝 미등록 — 편집에서 구성)",
+  "baseInputs": [],
+  "steps": []
+}

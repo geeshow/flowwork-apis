@@ -1,0 +1,58 @@
+{
+  "id": "sell",
+  "domain": "매매",
+  "task": "매도",
+  "name": "매도",
+  "description": "계좌번호와 비밀번호로 보유 포지션을 전량 매도한다.",
+  "baseInputs": [
+    {
+      "kind": "MANUAL",
+      "key": "accountNo",
+      "label": "계좌번호",
+      "valueType": "string"
+    },
+    {
+      "kind": "MANUAL",
+      "key": "password",
+      "label": "비밀번호",
+      "valueType": "password"
+    }
+  ],
+  "steps": [
+    {
+      "id": "do_sell",
+      "order": 1,
+      "name": "매도",
+      "apiBinding": {
+        "catalogEntry": {
+          "department": "core",
+          "collectionFile": "core",
+          "itemPath": [
+            "매매"
+          ],
+          "name": "매도"
+        },
+        "variableBindings": {
+          "accountNo": {
+            "kind": "USER_INPUT",
+            "inputKey": "accountNo"
+          },
+          "password": {
+            "kind": "USER_INPUT",
+            "inputKey": "password"
+          }
+        }
+      },
+      "stopOnFailure": true,
+      "resultView": {
+        "mode": "TABLE",
+        "columns": [
+          "accountNo",
+          "status",
+          "soldAmount",
+          "positions"
+        ]
+      }
+    }
+  ]
+}

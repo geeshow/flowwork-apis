@@ -1,0 +1,9 @@
+{
+  "id": "fund_balance_reset",
+  "domain": "계좌",
+  "task": "초기화",
+  "name": "펀드 잔고 및 약정 초기화",
+  "description": "(스텝 미등록 — 편집에서 구성)",
+  "baseInputs": [],
+  "steps": []
+}

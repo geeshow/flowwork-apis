@@ -1,0 +1,49 @@
+{
+  "id": "65081f9e-9888-4291-8fea-bf92dd9c6c7f",
+  "domain": "계좌",
+  "task": "조회테스트",
+  "name": "사용자 조회",
+  "description": "",
+  "baseInputs": [
+    {
+      "kind": "MANUAL",
+      "key": "customerId",
+      "label": "고객 ID",
+      "valueType": "string"
+    }
+  ],
+  "steps": [
+    {
+      "id": "step_3udyqb",
+      "order": 1,
+      "name": "조회",
+      "apiBinding": {
+        "catalogEntry": {
+          "department": "customer",
+          "collectionFile": "customer",
+          "itemPath": [
+            "고객"
+          ],
+          "name": "고객 조회"
+        },
+        "variableBindings": {
+          "authToken": {
+            "kind": "ENV",
+            "envKey": "authToken"
+          },
+          "baseUrl": {
+            "kind": "ENV",
+            "envKey": "baseUrl"
+          },
+          "customerId": {
+            "kind": "USER_INPUT",
+            "inputKey": "customerId"
+          }
+        }
+      },
+      "workflowBinding": null,
+      "branchCondition": null,
+      "stopOnFailure": false
+    }
+  ]
+}

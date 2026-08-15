@@ -1,0 +1,48 @@
+{
+  "id": "force_settle",
+  "domain": "정산",
+  "task": "강제정산",
+  "name": "강제 정산",
+  "description": "계좌번호로 미정산 잔액을 강제 정산한다.",
+  "baseInputs": [
+    {
+      "kind": "MANUAL",
+      "key": "accountNo",
+      "label": "계좌번호",
+      "valueType": "string"
+    }
+  ],
+  "steps": [
+    {
+      "id": "do_settle",
+      "order": 1,
+      "name": "강제 정산",
+      "apiBinding": {
+        "catalogEntry": {
+          "department": "core",
+          "collectionFile": "core",
+          "itemPath": [
+            "정산"
+          ],
+          "name": "강제 정산"
+        },
+        "variableBindings": {
+          "accountNo": {
+            "kind": "USER_INPUT",
+            "inputKey": "accountNo"
+          }
+        }
+      },
+      "stopOnFailure": true,
+      "resultView": {
+        "mode": "TABLE",
+        "columns": [
+          "accountNo",
+          "settlementId",
+          "status",
+          "amount"
+        ]
+      }
+    }
+  ]
+}

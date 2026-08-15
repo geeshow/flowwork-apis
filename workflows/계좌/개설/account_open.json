@@ -1,0 +1,9 @@
+{
+  "id": "account_open",
+  "domain": "계좌",
+  "task": "개설",
+  "name": "계좌 개설",
+  "description": "(스텝 미등록 — 편집에서 구성)",
+  "baseInputs": [],
+  "steps": []
+}
