@@ -1,0 +1,26 @@
+meta {
+  name: 계좌 폐쇄
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{coreBaseUrl}}/accounts/{{accountNo}}/close
+  body: json
+  auth: none
+}
+
+headers {
+  @description('인증 토큰 (Bearer)')
+  Authorization: Bearer {{authToken}}
+  @description('요청 본문 형식')
+  Content-Type: application/json
+}
+
+body:json {
+  {"reason": "{{reason}}"}
+}
+
+docs {
+  output: accountNo=계좌번호, status=상태, closedAt=폐쇄일, reason=사유
+}
