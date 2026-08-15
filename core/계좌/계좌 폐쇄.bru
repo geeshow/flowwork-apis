@@ -1,7 +1,7 @@
 meta {
   name: 계좌 폐쇄
   type: http
-  seq: 3
+  seq: 4
 }
 
 post {
@@ -11,9 +11,9 @@ post {
 }
 
 headers {
-  @description("인증 토큰 (Bearer)")
+  @description('인증 토큰 (Bearer)')
   Authorization: Bearer {{authToken}}
-  @description("요청 본문 형식")
+  @description('요청 본문 형식')
   Content-Type: application/json
 }
 
