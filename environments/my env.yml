@@ -2,6 +2,7 @@ name: my env
 variables:
   - name: test
     value: "1234"
+    description: "1122"
   - secret: true
     name: sec
     description: tetset
