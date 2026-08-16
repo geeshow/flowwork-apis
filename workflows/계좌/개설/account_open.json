@@ -3,7 +3,7 @@
   "domain": "계좌",
   "task": "개설",
   "name": "계좌 개설",
-  "description": "(스텝 미등록 — 편집에서 구성)",
+  "description": "신규 고객 계좌 개설 — 본인 확인 후 계좌를 생성한다",
   "baseInputs": [],
   "steps": []
 }
