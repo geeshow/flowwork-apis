@@ -3,7 +3,7 @@
   "domain": "payments",
   "task": "정산",
   "name": "정산 취소 처리",
-  "description": "A 브랜치의 설명",
+  "description": "B 브랜치의 설명",
   "baseInputs": [
     {
       "kind": "MANUAL",
