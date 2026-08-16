@@ -1,0 +1,9 @@
+{
+  "id": "3f12b0f7-6e3d-41fd-8d33-92a89645fac9",
+  "domain": "계좌",
+  "task": "출금",
+  "name": "이체 한도 변경",
+  "description": "고객 조회 후 이체 한도를 변경한다 (작업 중 — 커밋 전)",
+  "baseInputs": [],
+  "steps": []
+}
