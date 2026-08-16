@@ -2,7 +2,7 @@
   "id": "user_lookup",
   "domain": "계좌",
   "task": "사용자관리",
-  "name": "사용자 조회",
+  "name": "사용자 조회1",
   "description": "고객 ID로 고객 정보를 조회한다.",
   "baseInputs": [
     {
@@ -33,6 +33,7 @@
           }
         }
       },
+      "stopOnFailure": false,
       "resultView": {
         "mode": "TABLE",
         "columns": [
