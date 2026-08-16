@@ -1,0 +1,8 @@
+{
+  "id": "wf-edit-flow-test",
+  "domain": "계좌",
+  "task": "검증",
+  "name": "편집 흐름 테스트",
+  "baseInputs": [],
+  "steps": []
+}
