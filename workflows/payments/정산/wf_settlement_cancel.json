@@ -3,7 +3,7 @@
   "domain": "payments",
   "task": "정산",
   "name": "정산 취소 처리",
-  "description": "고객 정산을 조회하고, 상태가 ACTIVE면 취소한다.",
+  "description": "A 브랜치의 설명",
   "baseInputs": [
     {
       "kind": "MANUAL",
@@ -47,18 +47,13 @@
             "inputKey": "customerId"
           }
         }
-      }
+      },
+      "stopOnFailure": false
     },
     {
       "id": "step_2",
       "order": 2,
       "name": "폐쇄",
-      "branchCondition": {
-        "sourceStepId": "step_1",
-        "jsonPath": "$.data.status",
-        "operator": "EQ",
-        "compareValue": "ACTIVE"
-      },
       "apiBinding": {
         "catalogEntry": {
           "department": "payments",
@@ -79,6 +74,12 @@
             "inputKey": "reason"
           }
         }
+      },
+      "branchCondition": {
+        "sourceStepId": "step_1",
+        "jsonPath": "$.data.status",
+        "operator": "EQ",
+        "compareValue": "ACTIVE"
       },
       "stopOnFailure": true
     }
