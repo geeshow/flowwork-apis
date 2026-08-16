@@ -1,9 +1,0 @@
-{
-  "id": "e49af24d-d542-4c38-ac7b-6de48665f18d",
-  "domain": "계좌",
-  "task": "개설",
-  "name": "계좌 개설 이어하기 초기화 copy",
-  "description": "(스텝 미등록 — 편집에서 구성)",
-  "baseInputs": [],
-  "steps": []
-}
