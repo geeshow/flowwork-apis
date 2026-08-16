@@ -3,7 +3,7 @@
   "domain": "payments",
   "task": "정산",
   "name": "정산 취소 처리",
-  "description": "B 브랜치의 설명",
+  "description": "고객 정산을 조회하고, 상태가 ACTIVE면 취소한다.",
   "baseInputs": [
     {
       "kind": "MANUAL",
