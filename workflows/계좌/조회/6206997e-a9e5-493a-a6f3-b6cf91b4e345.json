@@ -1,0 +1,9 @@
+{
+  "id": "6206997e-a9e5-493a-a6f3-b6cf91b4e345",
+  "domain": "계좌",
+  "task": "조회",
+  "name": "자동기록 테스트",
+  "description": "저장 즉시 커밋되는지 확인",
+  "baseInputs": [],
+  "steps": []
+}
