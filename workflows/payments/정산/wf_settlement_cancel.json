@@ -4,7 +4,7 @@
   "task": "정산",
   "name": "정산 취소 처리",
   "description": "고객 정산을 조회하고, 상태가 ACTIVE면 취소한다.",
-  "docs": "## 정산 취소 처리\n\n고객 정산을 조회한 뒤 상태가 ACTIVE인 건만 취소한다.\n\n- 1단계: 정산 조회\n- 2단계: 상태가 ACTIVE면 폐쇄",
+  "docs": "## 정산 취소 처리\n\n고객 정산을 조회한 뒤 상태가 ACTIVE인 건만 취소한다.\n\n- 1단계: 정산 조회\n- 2단계: 상태가 ACTIVE면 폐쇄\n- 3단계: 결과 확인",
   "baseInputs": [
     {
       "kind": "MANUAL",
