@@ -1,0 +1,9 @@
+{
+  "id": "854f6f46-1acd-4d62-9c49-e90d4ddecb0a",
+  "domain": "계좌",
+  "task": "조회",
+  "name": "잔액 증명서 발급",
+  "description": "계좌 잔액을 조회하고 증명서 발급을 요청한다",
+  "baseInputs": [],
+  "steps": []
+}
