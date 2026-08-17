@@ -1,0 +1,9 @@
+{
+  "id": "f030a4bc-822f-4965-a467-9f44b71b90ca",
+  "domain": "계좌",
+  "task": "조회",
+  "name": "계좌 잔액 점검표",
+  "description": "보안 사용자 ID로 계좌 목록을 조회해 잔액을 표로 보여준다.",
+  "baseInputs": [],
+  "steps": []
+}
