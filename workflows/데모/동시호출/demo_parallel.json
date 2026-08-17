@@ -1,0 +1,157 @@
+{
+  "id": "demo_parallel",
+  "domain": "데모",
+  "task": "동시호출",
+  "name": "동시 호출형 — 서로 무관한 조회를 한꺼번에",
+  "description": "사용자 조회와 코드 조회 3건을 동시에 출발시키고, 모두 끝난 뒤 계좌 목록으로 이어집니다.",
+  "docs": "서로 결과를 참조하지 않는 호출은 **동시에** 보내는 편이 빠릅니다.\n\n- 1~4번은 한 묶음으로 함께 출발합니다 (2~4번에 **비동기 요청**이 걸려 있습니다).\n- 5번은 묶음이 모두 끝난 뒤 1번의 응답(보안 사용자 ID)을 받아 실행됩니다.\n\n흐름도에서는 동시 호출이 **독립된 호출**로 그려지고, 출발시킨 스텝과는 점선으로만 이어집니다.\n한 묶음 안의 스텝끼리는 서로의 응답을 볼 수 없으니, 그런 값은 다음 스텝에서 쓰세요.",
+  "baseInputs": [
+    {
+      "kind": "MANUAL",
+      "key": "app_user_id",
+      "label": "앱 사용자 ID",
+      "valueType": "string"
+    }
+  ],
+  "steps": [
+    {
+      "id": "lookup_user",
+      "order": 1,
+      "name": "사용자 정보 조회 (앱ID)",
+      "apiBinding": {
+        "catalogEntry": {
+          "department": "core",
+          "collectionFile": "core",
+          "itemPath": [
+            "사용자"
+          ],
+          "name": "사용자 정보 조회 (앱ID)"
+        },
+        "variableBindings": {
+          "app_user_id": {
+            "kind": "USER_INPUT",
+            "inputKey": "app_user_id"
+          }
+        }
+      },
+      "parallel": false,
+      "stopOnFailure": true,
+      "resultView": {
+        "mode": "TABLE",
+        "columns": [
+          "name",
+          "sec_user_id",
+          "CIF"
+        ]
+      }
+    },
+    {
+      "id": "agreements",
+      "order": 2,
+      "name": "전체 약정 코드 목록",
+      "apiBinding": {
+        "catalogEntry": {
+          "department": "core",
+          "collectionFile": "core",
+          "itemPath": [
+            "약정"
+          ],
+          "name": "전체 약정 코드 목록 조회"
+        },
+        "variableBindings": {}
+      },
+      "parallel": true,
+      "stopOnFailure": false,
+      "resultView": {
+        "mode": "TABLE",
+        "columns": [
+          "code",
+          "name"
+        ]
+      }
+    },
+    {
+      "id": "user_codes",
+      "order": 3,
+      "name": "사용자 상태 코드",
+      "apiBinding": {
+        "catalogEntry": {
+          "department": "core",
+          "collectionFile": "core",
+          "itemPath": [
+            "메타코드"
+          ],
+          "name": "사용자 상태 코드"
+        },
+        "variableBindings": {}
+      },
+      "parallel": true,
+      "stopOnFailure": false,
+      "resultView": {
+        "mode": "TABLE",
+        "columns": [
+          "code",
+          "name"
+        ]
+      }
+    },
+    {
+      "id": "account_codes",
+      "order": 4,
+      "name": "계좌 활성 상태 코드",
+      "apiBinding": {
+        "catalogEntry": {
+          "department": "core",
+          "collectionFile": "core",
+          "itemPath": [
+            "메타코드"
+          ],
+          "name": "계좌 활성 상태 코드"
+        },
+        "variableBindings": {}
+      },
+      "parallel": true,
+      "stopOnFailure": false,
+      "resultView": {
+        "mode": "TABLE",
+        "columns": [
+          "code",
+          "name"
+        ]
+      }
+    },
+    {
+      "id": "list_accounts",
+      "order": 5,
+      "name": "계좌 목록 조회 (보안ID)",
+      "apiBinding": {
+        "catalogEntry": {
+          "department": "core",
+          "collectionFile": "core",
+          "itemPath": [
+            "계좌"
+          ],
+          "name": "계좌 목록 조회 (보안ID)"
+        },
+        "variableBindings": {
+          "sec_user_id": {
+            "kind": "PREV_RESPONSE",
+            "stepId": "lookup_user",
+            "jsonPath": "$.data.sec_user_id"
+          }
+        }
+      },
+      "parallel": false,
+      "stopOnFailure": false,
+      "resultView": {
+        "mode": "TABLE",
+        "columns": [
+          "accountNo",
+          "accountType",
+          "status",
+          "balance.amount"
+        ]
+      }
+    }
+  ]
+}

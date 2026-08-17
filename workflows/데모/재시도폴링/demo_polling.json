@@ -1,0 +1,107 @@
+{
+  "id": "demo_polling",
+  "domain": "데모",
+  "task": "재시도폴링",
+  "name": "폴링형 — 정해진 횟수만큼 상태 확인",
+  "description": "정산 상태를 2초 간격으로 3번 확인한 뒤, 고객 정보를 조회하며 마무리합니다.",
+  "docs": "결과가 나올 때까지 **같은 조회를 간격을 두고 되풀이**하는 형태입니다.\n\n```\n3번 반복                    ← 반복 블록 (횟수 지정)\n  1-1 정산 조회\n  1-2 2초 대기\n2 고객 정보 조회\n```\n\n- 반복 블록의 기준을 **목록**이 아니라 **횟수**로 두면 재시도·폴링이 됩니다.\n- 회차마다 조회 → 대기가 한 벌씩 돌아, 전체는 약 6초가 걸립니다.\n- 반복이 끝나면 흐름은 다음 스텝으로 이어집니다.\n\n실행 화면의 회차 표시(`3/3회`)와 개발자 도구 네트워크 기록에서 2초 간격을 확인할 수 있습니다.",
+  "baseInputs": [
+    {
+      "kind": "API_COMBO",
+      "key": "customerId",
+      "label": "고객 선택",
+      "sourceApiId": "83214d36eb822903",
+      "labelField": "name",
+      "valueField": "id"
+    }
+  ],
+  "steps": [
+    {
+      "id": "retry",
+      "order": 1,
+      "name": "3번 확인",
+      "kind": "REPEAT",
+      "repeat": {
+        "kind": "COUNT",
+        "count": 3,
+        "maxIterations": 3
+      },
+      "parallel": false,
+      "stopOnFailure": false
+    },
+    {
+      "id": "check_settlement",
+      "order": 2,
+      "name": "정산 조회",
+      "parentId": "retry",
+      "apiBinding": {
+        "catalogEntry": {
+          "department": "payments",
+          "collectionFile": "payments",
+          "itemPath": [
+            "정산"
+          ],
+          "name": "정산 조회"
+        },
+        "variableBindings": {
+          "customerId": {
+            "kind": "USER_INPUT",
+            "inputKey": "customerId"
+          }
+        }
+      },
+      "parallel": false,
+      "stopOnFailure": false,
+      "resultView": {
+        "mode": "TABLE",
+        "columns": [
+          "settlementId",
+          "status",
+          "amount"
+        ]
+      }
+    },
+    {
+      "id": "wait",
+      "order": 3,
+      "name": "2초 대기",
+      "parentId": "retry",
+      "delayBinding": {
+        "seconds": 2
+      },
+      "parallel": false,
+      "stopOnFailure": false
+    },
+    {
+      "id": "customer",
+      "order": 4,
+      "name": "고객 정보 조회",
+      "apiBinding": {
+        "catalogEntry": {
+          "department": "customer",
+          "collectionFile": "customer",
+          "itemPath": [
+            "고객"
+          ],
+          "name": "고객 조회"
+        },
+        "variableBindings": {
+          "customerId": {
+            "kind": "USER_INPUT",
+            "inputKey": "customerId"
+          }
+        }
+      },
+      "parallel": false,
+      "stopOnFailure": false,
+      "resultView": {
+        "mode": "TABLE",
+        "columns": [
+          "id",
+          "name",
+          "phone"
+        ]
+      }
+    }
+  ]
+}

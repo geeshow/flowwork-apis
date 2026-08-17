@@ -1,0 +1,120 @@
+{
+  "id": "demo_sequential",
+  "domain": "데모",
+  "task": "순차조회",
+  "name": "순차 조회형 — 앞 결과를 뒤에서 쓰기",
+  "description": "사용자 → 계좌 목록 → 첫 계좌 소유자 순으로, 앞 스텝의 응답을 뒤 스텝 입력으로 물려 조회합니다.",
+  "docs": "가장 기본이 되는 작업 형태입니다. 스텝이 한 줄로 이어지고, **앞 스텝의 응답에서 뽑은 값**이 뒤 스텝의 입력이 됩니다.\n\n1. 앱 사용자 ID로 사용자를 조회해 보안 사용자 ID를 얻습니다.\n2. 그 보안 ID로 계좌 목록을 조회합니다.\n3. 목록의 첫 계좌 소유자 CIF로 사용자 정보를 다시 확인합니다.\n\n조회(GET)만 하므로 몇 번을 실행해도 데이터가 바뀌지 않습니다. `U1000`으로 실행해 보세요.",
+  "baseInputs": [
+    {
+      "kind": "MANUAL",
+      "key": "app_user_id",
+      "label": "앱 사용자 ID",
+      "valueType": "string"
+    }
+  ],
+  "steps": [
+    {
+      "id": "lookup_user",
+      "order": 1,
+      "name": "사용자 정보 조회 (앱ID)",
+      "apiBinding": {
+        "catalogEntry": {
+          "department": "core",
+          "collectionFile": "core",
+          "itemPath": [
+            "사용자"
+          ],
+          "name": "사용자 정보 조회 (앱ID)"
+        },
+        "variableBindings": {
+          "app_user_id": {
+            "kind": "USER_INPUT",
+            "inputKey": "app_user_id"
+          }
+        }
+      },
+      "parallel": false,
+      "stopOnFailure": true,
+      "resultView": {
+        "mode": "TABLE",
+        "columns": [
+          "name",
+          "sec_user_id",
+          "CIF",
+          "phone"
+        ]
+      }
+    },
+    {
+      "id": "list_accounts",
+      "order": 2,
+      "name": "계좌 목록 조회 (보안ID)",
+      "apiBinding": {
+        "catalogEntry": {
+          "department": "core",
+          "collectionFile": "core",
+          "itemPath": [
+            "계좌"
+          ],
+          "name": "계좌 목록 조회 (보안ID)"
+        },
+        "variableBindings": {
+          "sec_user_id": {
+            "kind": "PREV_RESPONSE",
+            "stepId": "lookup_user",
+            "jsonPath": "$.data.sec_user_id"
+          }
+        }
+      },
+      "parallel": false,
+      "stopOnFailure": true,
+      "resultView": {
+        "mode": "TABLE",
+        "columns": [
+          "accountNo",
+          "accountType",
+          "status",
+          "balance.amount"
+        ]
+      }
+    },
+    {
+      "id": "first_owner",
+      "order": 3,
+      "name": "첫 계좌 소유자 확인",
+      "apiBinding": {
+        "catalogEntry": {
+          "department": "core",
+          "collectionFile": "core",
+          "itemPath": [
+            "사용자"
+          ],
+          "name": "사용자 정보 조회"
+        },
+        "variableBindings": {
+          "sec_user_id": {
+            "kind": "FIXED",
+            "value": ""
+          },
+          "CIF": {
+            "kind": "PREV_RESPONSE",
+            "stepId": "list_accounts",
+            "jsonPath": "$.data[0].owner.cif"
+          }
+        }
+      },
+      "parallel": false,
+      "stopOnFailure": false,
+      "resultView": {
+        "mode": "TABLE",
+        "columns": [
+          "name",
+          "CIF",
+          "phone",
+          "email"
+        ]
+      }
+    }
+  ]
+}
