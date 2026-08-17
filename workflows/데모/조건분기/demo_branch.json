@@ -1,0 +1,191 @@
+{
+  "id": "demo_branch",
+  "domain": "데모",
+  "task": "조건분기",
+  "name": "조건 분기형 — 결과에 따라 갈라지기",
+  "description": "출금 결과가 승인이면 잔액을 다시 확인하고, 실패면 고객 연락처를 확인합니다.",
+  "docs": "앞 스텝의 **응답 값에 따라** 뒤 처리가 갈리는 형태입니다.\n\n```\n1 계좌 출금\n출금 상태 = APPROVED 일 때만     ← 분기 블록\n  2-1 잔액 다시 확인\n출금 상태 ≠ APPROVED 일 때만     ← 분기 블록\n  3-1 고객 연락처 확인\n```\n\n분기 블록을 둘 나란히 두면 if / else가 됩니다. 조건에 맞지 않는 블록은 안의 스텝까지 통째로 건너뜁니다.\n\n**해 보기** — 데모 출금 비밀번호는 `0000`입니다.\n- 비밀번호 `0000`, 금액을 잔액보다 작게 → 승인 → 잔액 확인 쪽으로 갑니다.\n- 비밀번호를 다르게 넣거나 잔액보다 큰 금액 → 실패 → 연락처 확인 쪽으로 갑니다.",
+  "baseInputs": [
+    {
+      "kind": "MANUAL",
+      "key": "app_user_id",
+      "label": "앱 사용자 ID",
+      "valueType": "string"
+    },
+    {
+      "kind": "DEPENDENT_LOOKUP",
+      "key": "sec_user_id",
+      "label": "보안 사용자 ID",
+      "dependsOnKey": "app_user_id",
+      "lookupApiId": "11c8a795c396e2b4",
+      "displayFields": [
+        "name",
+        "sec_user_id"
+      ],
+      "valueField": "sec_user_id"
+    },
+    {
+      "kind": "DEPENDENT_COMBO",
+      "key": "accountNo",
+      "label": "출금 계좌",
+      "dependsOnKey": "sec_user_id",
+      "lookupApiId": "6f11d17b8bf9ede4",
+      "labelField": "accountType",
+      "valueField": "accountNo"
+    },
+    {
+      "kind": "MANUAL",
+      "key": "amount",
+      "label": "출금 금액",
+      "valueType": "number"
+    },
+    {
+      "kind": "MANUAL",
+      "key": "password",
+      "label": "출금 비밀번호",
+      "valueType": "password"
+    }
+  ],
+  "steps": [
+    {
+      "id": "withdraw",
+      "order": 1,
+      "name": "계좌 출금",
+      "apiBinding": {
+        "catalogEntry": {
+          "department": "core",
+          "collectionFile": "core",
+          "itemPath": [
+            "계좌"
+          ],
+          "name": "계좌 출금"
+        },
+        "variableBindings": {
+          "accountNo": {
+            "kind": "USER_INPUT",
+            "inputKey": "accountNo"
+          },
+          "amount": {
+            "kind": "USER_INPUT",
+            "inputKey": "amount"
+          },
+          "password": {
+            "kind": "USER_INPUT",
+            "inputKey": "password"
+          }
+        }
+      },
+      "parallel": false,
+      "stopOnFailure": false,
+      "resultView": {
+        "mode": "TABLE",
+        "columns": [
+          "accountNo",
+          "status",
+          "withdrawnAmount",
+          "balanceAfter",
+          "reason"
+        ]
+      }
+    },
+    {
+      "id": "if_ok",
+      "order": 2,
+      "name": "출금이 승인됐을 때",
+      "kind": "BRANCH",
+      "parallel": false,
+      "branchCondition": {
+        "source": {
+          "kind": "PREV_RESPONSE",
+          "stepId": "withdraw",
+          "jsonPath": "$.data.status"
+        },
+        "operator": "EQ",
+        "compareValue": "APPROVED"
+      },
+      "stopOnFailure": false
+    },
+    {
+      "id": "recheck_balance",
+      "order": 3,
+      "name": "잔액 다시 확인",
+      "parentId": "if_ok",
+      "apiBinding": {
+        "catalogEntry": {
+          "department": "core",
+          "collectionFile": "core",
+          "itemPath": [
+            "계좌"
+          ],
+          "name": "계좌 목록 조회 (보안ID)"
+        },
+        "variableBindings": {
+          "sec_user_id": {
+            "kind": "USER_INPUT",
+            "inputKey": "sec_user_id"
+          }
+        }
+      },
+      "parallel": false,
+      "stopOnFailure": false,
+      "resultView": {
+        "mode": "TABLE",
+        "columns": [
+          "accountNo",
+          "accountType",
+          "status",
+          "balance.amount"
+        ]
+      }
+    },
+    {
+      "id": "if_failed",
+      "order": 4,
+      "name": "출금이 실패했을 때",
+      "kind": "BRANCH",
+      "parallel": false,
+      "branchCondition": {
+        "source": {
+          "kind": "PREV_RESPONSE",
+          "stepId": "withdraw",
+          "jsonPath": "$.data.status"
+        },
+        "operator": "NE",
+        "compareValue": "APPROVED"
+      },
+      "stopOnFailure": false
+    },
+    {
+      "id": "contact",
+      "order": 5,
+      "name": "고객 연락처 확인",
+      "parentId": "if_failed",
+      "apiBinding": {
+        "catalogEntry": {
+          "department": "core",
+          "collectionFile": "core",
+          "itemPath": [
+            "사용자"
+          ],
+          "name": "사용자 정보 조회 (앱ID)"
+        },
+        "variableBindings": {
+          "app_user_id": {
+            "kind": "USER_INPUT",
+            "inputKey": "app_user_id"
+          }
+        }
+      },
+      "parallel": false,
+      "stopOnFailure": false,
+      "resultView": {
+        "mode": "TABLE",
+        "columns": [
+          "name",
+          "phone",
+          "email"
+        ]
+      }
+    }
+  ]
+}
