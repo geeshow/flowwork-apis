@@ -1,0 +1,189 @@
+{
+  "id": "demo_control_flow",
+  "domain": "계좌",
+  "task": "데모",
+  "name": "흐름 제어 데모 (반복·분기·동시·지연)",
+  "description": "반복·분기·동시 실행·지연을 한 번에 보여주는 읽기 전용 데모입니다.",
+  "docs": "이 작업은 새로 들어온 흐름 제어 기능을 눈으로 보기 위한 데모입니다.\n\n## 무엇을 보여주나\n- **동시 실행**: 1번(사용자 조회)과 2번(약정 코드 목록)이 함께 출발합니다.\n- **지연**: 3번에서 2초 쉬었다가 다음으로 넘어갑니다.\n- **반복**: 5번이 계좌 목록의 계좌마다 한 번씩, 그 계좌 소유자(CIF)로 사용자 정보를 확인합니다.\n- **분기**: 6번은 입력값 \"코드 점검\"이 Y일 때만 실행됩니다.\n\n조회(GET)만 하므로 여러 번 실행해도 데이터가 바뀌지 않습니다.",
+  "baseInputs": [
+    {
+      "kind": "MANUAL",
+      "key": "app_user_id",
+      "label": "앱 사용자 ID",
+      "valueType": "string"
+    },
+    {
+      "kind": "MANUAL",
+      "key": "check_codes",
+      "label": "코드 점검 (Y/N)",
+      "valueType": "string"
+    }
+  ],
+  "steps": [
+    {
+      "id": "lookup_user",
+      "order": 1,
+      "name": "사용자 정보 조회 (앱ID)",
+      "apiBinding": {
+        "catalogEntry": {
+          "department": "core",
+          "collectionFile": "core",
+          "itemPath": [
+            "사용자"
+          ],
+          "name": "사용자 정보 조회 (앱ID)"
+        },
+        "variableBindings": {
+          "app_user_id": {
+            "kind": "USER_INPUT",
+            "inputKey": "app_user_id"
+          }
+        }
+      },
+      "stopOnFailure": true,
+      "resultView": {
+        "mode": "TABLE",
+        "columns": [
+          "name",
+          "sec_user_id",
+          "CIF"
+        ]
+      }
+    },
+    {
+      "id": "agreement_codes",
+      "order": 2,
+      "name": "전체 약정 코드 목록 조회",
+      "apiBinding": {
+        "catalogEntry": {
+          "department": "core",
+          "collectionFile": "core",
+          "itemPath": [
+            "약정"
+          ],
+          "name": "전체 약정 코드 목록 조회"
+        },
+        "variableBindings": {}
+      },
+      "stopOnFailure": false,
+      "resultView": {
+        "mode": "TABLE",
+        "columns": [
+          "code",
+          "name"
+        ]
+      }
+    },
+    {
+      "id": "wait_a_bit",
+      "order": 3,
+      "name": "2초 대기",
+      "stopOnFailure": false
+    },
+    {
+      "id": "list_accounts",
+      "order": 4,
+      "name": "계좌 목록 조회 (보안ID)",
+      "apiBinding": {
+        "catalogEntry": {
+          "department": "core",
+          "collectionFile": "core",
+          "itemPath": [
+            "계좌"
+          ],
+          "name": "계좌 목록 조회 (보안ID)"
+        },
+        "variableBindings": {
+          "sec_user_id": {
+            "kind": "PREV_RESPONSE",
+            "stepId": "lookup_user",
+            "jsonPath": "$.data.sec_user_id"
+          }
+        }
+      },
+      "stopOnFailure": true,
+      "resultView": {
+        "mode": "TABLE",
+        "columns": [
+          "accountNo",
+          "accountType",
+          "status",
+          "owner.cif",
+          "balance.amount"
+        ]
+      }
+    },
+    {
+      "id": "check_owner",
+      "order": 5,
+      "name": "계좌 소유자 확인 (계좌마다)",
+      "apiBinding": {
+        "catalogEntry": {
+          "department": "core",
+          "collectionFile": "core",
+          "itemPath": [
+            "사용자"
+          ],
+          "name": "사용자 정보 조회"
+        },
+        "variableBindings": {
+          "sec_user_id": {
+            "kind": "FIXED",
+            "value": ""
+          },
+          "CIF": {
+            "kind": "LOOP_ITEM",
+            "itemPath": "$.owner.cif"
+          }
+        }
+      },
+      "stopOnFailure": false,
+      "resultView": {
+        "mode": "TABLE",
+        "columns": [
+          "name",
+          "sec_user_id",
+          "CIF",
+          "phone"
+        ]
+      }
+    },
+    {
+      "id": "status_codes",
+      "order": 6,
+      "name": "계좌 상태 코드 조회 (조건부)",
+      "apiBinding": {
+        "catalogEntry": {
+          "department": "core",
+          "collectionFile": "core",
+          "itemPath": [
+            "메타코드"
+          ],
+          "name": "메타 코드 조회"
+        },
+        "variableBindings": {
+          "code_group": {
+            "kind": "FIXED",
+            "value": "account_status"
+          }
+        }
+      },
+      "branchCondition": {
+        "source": {
+          "kind": "USER_INPUT",
+          "inputKey": "check_codes"
+        },
+        "operator": "EQ",
+        "compareValue": "Y"
+      },
+      "stopOnFailure": false,
+      "resultView": {
+        "mode": "TABLE",
+        "columns": [
+          "code",
+          "name"
+        ]
+      }
+    }
+  ]
+}
