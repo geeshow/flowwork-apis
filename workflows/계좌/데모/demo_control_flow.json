@@ -40,6 +40,7 @@
           }
         }
       },
+      "parallel": false,
       "stopOnFailure": true,
       "resultView": {
         "mode": "TABLE",
@@ -65,6 +66,7 @@
         },
         "variableBindings": {}
       },
+      "parallel": true,
       "stopOnFailure": false,
       "resultView": {
         "mode": "TABLE",
@@ -78,6 +80,10 @@
       "id": "wait_a_bit",
       "order": 3,
       "name": "2초 대기",
+      "delayBinding": {
+        "seconds": 2
+      },
+      "parallel": false,
       "stopOnFailure": false
     },
     {
@@ -101,6 +107,7 @@
           }
         }
       },
+      "parallel": false,
       "stopOnFailure": true,
       "resultView": {
         "mode": "TABLE",
@@ -137,6 +144,13 @@
           }
         }
       },
+      "repeat": {
+        "kind": "LIST",
+        "sourceStepId": "list_accounts",
+        "itemsPath": "$.data",
+        "maxIterations": 10
+      },
+      "parallel": false,
       "stopOnFailure": false,
       "resultView": {
         "mode": "TABLE",
@@ -168,6 +182,7 @@
           }
         }
       },
+      "parallel": false,
       "branchCondition": {
         "source": {
           "kind": "USER_INPUT",
