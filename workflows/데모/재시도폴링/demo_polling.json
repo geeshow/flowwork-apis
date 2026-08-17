@@ -78,8 +78,8 @@
       "name": "고객 정보 조회",
       "apiBinding": {
         "catalogEntry": {
-          "department": "payments",
-          "collectionFile": "payments",
+          "department": "customer",
+          "collectionFile": "customer",
           "itemPath": [
             "고객"
           ],
