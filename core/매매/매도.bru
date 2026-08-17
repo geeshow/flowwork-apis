@@ -1,0 +1,26 @@
+meta {
+  name: 매도
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{coreBaseUrl}}/accounts/{{accountNo}}/sell
+  body: json
+  auth: none
+}
+
+headers {
+  @description('인증 토큰 (Bearer)')
+  Authorization: Bearer {{authToken}}
+  @description('요청 본문 형식')
+  Content-Type: application/json
+}
+
+body:json {
+  {"password": "{{password}}"}
+}
+
+docs {
+  output: accountNo=계좌번호, status=상태, soldAmount=매도 금액, positions=매도 종목 수
+}

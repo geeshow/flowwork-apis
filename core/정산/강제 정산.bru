@@ -1,0 +1,20 @@
+meta {
+  name: 강제 정산
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{coreBaseUrl}}/accounts/{{accountNo}}/settle
+  body: none
+  auth: none
+}
+
+headers {
+  @description('인증 토큰 (Bearer)')
+  Authorization: Bearer {{authToken}}
+}
+
+docs {
+  output: accountNo=계좌번호, settlementId=정산번호, status=상태, amount=정산 금액
+}
