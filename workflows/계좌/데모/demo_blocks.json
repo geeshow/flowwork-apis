@@ -82,6 +82,7 @@
       "id": "each_account",
       "order": 3,
       "name": "계좌마다",
+      "kind": "REPEAT",
       "repeat": {
         "kind": "LIST",
         "sourceStepId": "list_accounts",
@@ -95,6 +96,8 @@
       "id": "if_active",
       "order": 4,
       "name": "활성 계좌일 때",
+      "kind": "BRANCH",
+      "parentId": "each_account",
       "parallel": false,
       "branchCondition": {
         "source": {
@@ -110,6 +113,7 @@
       "id": "check_owner",
       "order": 5,
       "name": "소유자 확인",
+      "parentId": "if_active",
       "apiBinding": {
         "catalogEntry": {
           "department": "core",
@@ -146,6 +150,7 @@
       "id": "cool_down",
       "order": 6,
       "name": "1초 대기",
+      "parentId": "if_active",
       "delayBinding": {
         "seconds": 1
       },
