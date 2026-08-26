@@ -1,0 +1,60 @@
+{
+  "id": "7e9a5aa9-cbac-4a75-9450-f20911f4fca3",
+  "domain": "계좌",
+  "task": "출금",
+  "name": "필드바인딩 E2E 테스트",
+  "description": "",
+  "baseInputs": [
+    {
+      "kind": "MANUAL",
+      "key": "contentType",
+      "label": "콘텐츠 타입",
+      "valueType": "string"
+    }
+  ],
+  "steps": [
+    {
+      "id": "step_ra6dyn",
+      "order": 1,
+      "name": "계좌 출금",
+      "apiBinding": {
+        "catalogEntry": {
+          "department": "core",
+          "collectionFile": "core",
+          "itemPath": [
+            "계좌"
+          ],
+          "name": "계좌 출금"
+        },
+        "variableBindings": {
+          "authToken": {
+            "kind": "ENV",
+            "envKey": "authToken"
+          },
+          "coreBaseUrl": {
+            "kind": "ENV",
+            "envKey": "coreBaseUrl"
+          },
+          "accountNo": {
+            "kind": "FIXED",
+            "value": "110-222-333"
+          },
+          "amount": {
+            "kind": "FIXED",
+            "value": "1000"
+          },
+          "password": {
+            "kind": "FIXED",
+            "value": "0000"
+          },
+          "header:Content-Type": {
+            "kind": "USER_INPUT",
+            "inputKey": "contentType"
+          }
+        }
+      },
+      "parallel": false,
+      "stopOnFailure": false
+    }
+  ]
+}
