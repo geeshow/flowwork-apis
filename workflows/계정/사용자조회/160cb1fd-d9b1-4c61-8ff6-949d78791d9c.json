@@ -24,7 +24,7 @@
           "itemPath": [
             "사용자"
           ],
-          "name": "사용자 정보 조회"
+          "name": "사용자 정보 조회 (앱ID)"
         },
         "variableBindings": {
           "authToken": {
