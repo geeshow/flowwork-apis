@@ -3,8 +3,7 @@
   "type": "collection",
   "ignore": [
     "node_modules",
-    ".git",
-    "core/메타코드"
+    ".git"
   ],
   "name": "flowwork-apis"
 }
