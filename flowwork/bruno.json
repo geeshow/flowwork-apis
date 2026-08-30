@@ -3,7 +3,9 @@
   "type": "collection",
   "ignore": [
     "node_modules",
-    ".git"
+    ".git",
+    "core/메타코드",
+    "customer/고객"
   ],
   "name": "flowwork-apis"
 }
