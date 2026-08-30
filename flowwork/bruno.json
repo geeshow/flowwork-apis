@@ -4,8 +4,7 @@
   "ignore": [
     "node_modules",
     ".git",
-    "core",
-    "core/계좌"
+    "core/메타코드"
   ],
   "name": "flowwork-apis"
 }
