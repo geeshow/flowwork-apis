@@ -3,7 +3,9 @@
   "type": "collection",
   "ignore": [
     "node_modules",
-    ".git"
+    ".git",
+    "core",
+    "core/계좌"
   ],
   "name": "flowwork-apis"
 }
